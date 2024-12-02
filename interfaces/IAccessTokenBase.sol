@@ -50,4 +50,7 @@ interface IAccessTokenBase {
         address spender, 
         uint256 amount
     ) external;
+
+    function setAccess(address accessAddress) external;
+    function canAccess(address owner, address accessAddress) external view returns(bool);
 }

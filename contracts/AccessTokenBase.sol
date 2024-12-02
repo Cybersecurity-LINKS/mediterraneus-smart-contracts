@@ -29,6 +29,7 @@ contract AccessTokenBase is
     
     mapping(address => bool) private _allowedMinters;
     mapping(address => uint256) public nonces_;
+    mapping(address => address) accesses;
 
     struct FixedRate {
         address fixedRateExchange;
@@ -50,6 +51,18 @@ contract AccessTokenBase is
         require(msg.sender == _factory, "Not the Factory address!");
         _;
     }
+
+    function setAccess(address accessAddress) external{
+        require(balanceOf(msg.sender) > 0, "Sender does not own an AT");
+        accesses[msg.sender] = accessAddress;
+    }
+
+    function canAccess(address owner, address accessAddress) external view returns(bool){
+        require(balanceOf(owner) > 0, "Sender does not own an AT");
+        return (accesses[owner] == accessAddress);
+    }
+
+
 
     // ONLY FACTORY
     function initialize(
